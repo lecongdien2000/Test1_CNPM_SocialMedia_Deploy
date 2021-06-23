@@ -13,7 +13,7 @@ public class ConnectionDB {
 
     public static Statement connect() throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url,
                     USERNAME, PASSWORD);
         }
@@ -22,7 +22,7 @@ public class ConnectionDB {
 
     public static PreparedStatement connect(String sql) throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url,
                     USERNAME, PASSWORD);
         }

@@ -3,11 +3,11 @@ package Database;
 import java.sql.*;
 
 public class ConnectionDB {
-    final static String HOST_NAME = "btyfejfcrprsofbzxwaf-mysql.services.clever-cloud.com";
+    final static String HOST_NAME = "remotemysql.com";
     final static String PORT = "3306";
-    final static String DATABASE_NAME = "btyfejfcrprsofbzxwaf";
-    final static String USERNAME = "ubgy5aone8fvp7ng";
-    final static String PASSWORD = "IIu41pi9g7ShMABEP1GR";
+    final static String DATABASE_NAME = "ckpO7pCTY8";
+    final static String USERNAME = "ckpO7pCTY8";
+    final static String PASSWORD = "lySzNZnzIV";
 
 //    final static String HOST_NAME = "localhost";
 //    final static String PORT = "3306";

@@ -1839,20 +1839,37 @@
                                                         <div class="img-bunch">
                                                             <div class="row">
 
-                                                                <%List<String> medias = post.content.images;
-                                                                    medias.addAll(post.content.videos);
-                                                                    for(String mediaPath: medias){
+                                                                <%List<String> imgs = post.content.images;
+
+                                                                    for(String img: imgs){
                                                                 %>
                                                                 <div class="col-lg-6 col-md-6 col-sm-6" >
                                                                 <figure>
                                                                     <a class="strip"
-                                                                       href="<%=mediaPath%>" title=""
+                                                                       href="<%=img%>" title=""
                                                                        data-strip-group="mygroup"
                                                                        data-strip-group-options="loop: false">
-                                                                        <img src="<%=mediaPath%>"
+                                                                        <img src="<%=img%>"
                                                                              alt="">
                                                                     </a>
                                                                 </figure>
+                                                                </div>
+                                                                <%}%>
+                                                                <%List<String> videos = post.content.videos;
+
+                                                                    for(String video: videos){
+                                                                %>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6" >
+                                                                    <figure>
+                                                                        <a class="strip"
+                                                                           href="<%=video%>" title=""
+                                                                           data-strip-group="mygroup"
+                                                                           data-strip-group-options="loop: false">
+                                                                            <video width="320" height="240" controls>
+                                                                                <source src="<%=video%>" type="video/mp4">
+                                                                            </video>
+                                                                        </a>
+                                                                    </figure>
                                                                 </div>
                                                                 <%}%>
 

@@ -17,6 +17,11 @@ public class PostsData {
             state1.setString(1, post.id); //insert user id
             state1.setString(2, post.user.id);
             state1.setString(3, post.content.text);
+
+            //ttest
+            System.out.print(post.content.text);
+
+
             state1.setTimestamp(4, java.sql.Timestamp.valueOf(post.date.convertDateTimeToSqlString()));
             state1.executeUpdate();
             state1.close();
@@ -72,6 +77,11 @@ public class PostsData {
             e.printStackTrace();
         }
         return size;
+    }
+
+    public static List<Post> getAllPost() {
+        List<String> values = new ArrayList<>();
+        return new ArrayList<Post>(getPreparedDataQuery("SELECT * FROM post", values).values());
     }
 
 

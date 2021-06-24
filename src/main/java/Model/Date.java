@@ -113,14 +113,7 @@ public class Date {
 
     @Override
     public String toString() {
-        return "Date{" +
-                "day=" + day +
-                ", month=" + month +
-                ", year=" + year +
-                ", hour=" + hour +
-                ", min=" + min +
-                ", sec=" + sec +
-                '}';
+        return day + "/" + month + "/" + year + "  " + hour + ":" + min + ":" + sec;
     }
 
     public String convertDateTimeToSqlString() {

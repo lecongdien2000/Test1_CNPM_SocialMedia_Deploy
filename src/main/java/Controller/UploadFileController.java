@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class UploadFileController extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         doPost(request, response);
     }
 
@@ -45,7 +48,11 @@ public class UploadFileController extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
         Post post = new Post();
+
+
 
         final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -54,23 +61,24 @@ public class UploadFileController extends HttpServlet {
         // sets maximum size of upload file
         upload.setFileSizeMax(MAX_FILE_SIZE);
 
-
         try {
             List<FileItem> fileItems = upload.parseRequest(request);
             for (FileItem fileItem : fileItems) {
                 if ("text".equals(fileItem.getFieldName())) {
-                    post.content.setText(fileItem.getString());
+                    String text = fileItem.getString();
+                    post.content.setText(text);
                 }
                 if (!fileItem.isFormField() && fileItems.size() > 0) {
                     // xử lý file
                     String nameimg = fileItem.getName();
                     if (!nameimg.equals("")) {
-                        String dirUrl = request.getServletContext()
-                                .getRealPath("") + File.separator + "files";
-                        dirUrl = request.getServletContext().getRealPath("") + "images/posts";// Dien Test
-                        File dir = new File(dirUrl);
+                        File dir = new File("");
+                        String dirUrl = dir.getAbsolutePath() + "/images/posts";
+//                        dirUrl = request.getServletContext().getRealPath("") + "/images/posts";
+
+                        dir = new File(dirUrl);
                         if (!dir.exists()) {
-                            dir.mkdir();
+                            dir.mkdirs();
                         }
                         String fileImg = dirUrl + File.separator + nameimg;
                         fileImg = dirUrl + "/" + nameimg; // Dien Test

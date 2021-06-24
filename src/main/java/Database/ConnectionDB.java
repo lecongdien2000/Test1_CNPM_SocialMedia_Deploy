@@ -8,7 +8,15 @@ public class ConnectionDB {
     final static String DATABASE_NAME = "btyfejfcrprsofbzxwaf";
     final static String USERNAME = "ubgy5aone8fvp7ng";
     final static String PASSWORD = "IIu41pi9g7ShMABEP1GR";
-    static String url = "jdbc:mysql://"+HOST_NAME+":"+PORT+"/"+DATABASE_NAME+"?useUnicode=true&characterEncoding=utf-8";
+
+//    final static String HOST_NAME = "localhost";
+//    final static String PORT = "3306";
+//    final static String DATABASE_NAME = "database_social";
+//    final static String USERNAME = "root";
+//    final static String PASSWORD = "";
+
+
+    static String url = "jdbc:mysql://"+HOST_NAME+":"+PORT+"/"+DATABASE_NAME+"?useUnicode=true&characterEncoding=utf-8&autoReconnect=true";
     static Connection connection;
 
     public static Statement connect() throws ClassNotFoundException, SQLException {
@@ -17,7 +25,7 @@ public class ConnectionDB {
             connection = DriverManager.getConnection(url,
                     USERNAME, PASSWORD);
         }
-        return connection.createStatement();
+        return connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 
     public static PreparedStatement connect(String sql) throws ClassNotFoundException, SQLException {
@@ -26,7 +34,7 @@ public class ConnectionDB {
             connection = DriverManager.getConnection(url,
                     USERNAME, PASSWORD);
         }
-        return connection.prepareStatement(sql);
+        return connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 
     public static void closeConnection() throws SQLException {

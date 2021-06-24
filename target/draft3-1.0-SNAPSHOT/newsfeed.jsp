@@ -1,7 +1,8 @@
 <%@page language="java" contentType="text/html; charset = UTF-8" pageEncoding="UTF-8" %>
 <%@page import="Controller.Controller"%>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="Model.PostCreated" %>
+<%@ page import="Model.Post" %>
+<%@ page import="java.util.List" %>
+<%@ page import="Model.Content" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +39,10 @@
 </div>
 <div class="theme-layout">
 
+    <%
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
+    %>
     <div class="postoverlay"></div>
 
     <div class="responsive-header">
@@ -1553,7 +1558,9 @@
                                             <img src="images/resources/admin.jpg" alt="">
                                         </figure>
                                         <form action="<%=request.getContextPath()%>/uploadFile" method="post"
-                                              enctype="multipart/form-data">
+                                              enctype="multipart/form-data"
+                                              accept-charset="UTF-8">
+
                                             <div class="newpst-input">
                                                 <textarea name="text" rows="2"
                                                           placeholder="Hôm nay bạn đang nghĩ gì?" content=""></textarea>
@@ -1784,9 +1791,9 @@
                                 <div class="loadMore">
                                     <%
                                         Controller controller = new Controller();
-                                        ArrayList<PostCreated> list = controller.laydulieu();
-                                        for (int i=list.size() - 1;i >=0;i--){
-
+                                        List<Post> list = controller.laydulieu(request);
+                                        for (int i=list.size()-1;i >=0;i--){
+                                            Post post = list.get(i);
 
 
 
@@ -1819,27 +1826,35 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <ins><a href="time-line.html" title=""><%=list.get(i).getFname() %></a> Đăng album
+                                                    <ins><a href="time-line.html" title=""><%=post.getUser().fullName %></a> Đăng album
                                                     </ins>
                                                     <span><i
-                                                            class="fa fa-globe"></i> <%=list.get(i).getDatecreated() %></span>
+                                                            class="fa fa-globe"></i> <%=post.date.toString() %></span>
                                                 </div>
                                                 <div class="post-meta">
                                                     <p>
-                                                        <%=list.get(i).getText() %>
+                                                        <%=post.content.getText() %>
                                                     </p>
                                                     <figure>
                                                         <div class="img-bunch">
                                                             <div class="row">
+
+                                                                <%List<String> medias = post.content.images;
+                                                                    medias.addAll(post.content.videos);
+                                                                    for(String mediaPath: medias){
+                                                                %>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6" >
                                                                 <figure>
                                                                     <a class="strip"
-                                                                       href="images/resources/album1.jpg" title=""
+                                                                       href="<%=mediaPath%>" title=""
                                                                        data-strip-group="mygroup"
                                                                        data-strip-group-options="loop: false">
-                                                                        <img src="<%=list.get(i).getMediapath()%>"
+                                                                        <img src="<%=mediaPath%>"
                                                                              alt="">
                                                                     </a>
                                                                 </figure>
+                                                                </div>
+                                                                <%}%>
 
                                                             </div>
                                                         </div>

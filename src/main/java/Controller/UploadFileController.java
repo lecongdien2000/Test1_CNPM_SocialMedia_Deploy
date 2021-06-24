@@ -111,7 +111,7 @@ public class UploadFileController extends HttpServlet {
 
         PostsData.insertPost(post);
 
-        request.getRequestDispatcher("/newsfeed.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
 }

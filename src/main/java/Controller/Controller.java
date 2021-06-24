@@ -91,26 +91,25 @@ public class Controller {
         // TODO implement here
     }
 
-    private void copyFile(String pathFrom, String pathTo){
-        File source = new File(pathFrom);
-        File dest = new File(pathTo);
-        if(!source.exists()){
-            source.mkdirs();
-        }
-        if(!dest.exists()){
-            dest.mkdirs();
-        }
-        try {
-            FileUtils.copyDirectory(source, dest);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public List<Post> laydulieu(HttpServletRequest request){
-        File file = new File("");
-        copyFile(file.getAbsolutePath() + "/images/posts", request.getServletContext().getRealPath("") +  "/images/posts");
-        return  PostsData.getAllPost();
+        List<Post> posts = PostsData.getAllPost();
+        for(Post post: posts){
+            List<String> medias = new ArrayList<>();
+            medias.addAll(post.content.images);
+            medias.addAll(post.content.videos);
+            for(String mediaPath: medias){
+                File file = new File(request.getServletContext().getRealPath("") + "/images/posts");
+                if(!file.exists()) file.mkdirs();
+                String desPath = request.getServletContext().getRealPath("") + mediaPath;
+                file = new File(desPath);
+                if(!file.exists())
+                    PostsData.getData(mediaPath, desPath);
+            }
+        }
+
+         return  PostsData.getAllPost();
     }
 
 

@@ -3,16 +3,19 @@ import Database.ConnectionDB;
 import Model.*;
 import Model.Date;
 
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static Database.ConnectionDB.connect;
+
 public class PostsData {
 
     public static void insertPost(Post post){
         try {
-            PreparedStatement state1 = ConnectionDB.connect("insert into post" +
+            PreparedStatement state1 = connect("insert into post" +
                     " values(?, ?, ?, ?)");
             state1.setString(1, post.id); //insert user id
             state1.setString(2, post.user.id);
@@ -42,7 +45,7 @@ public class PostsData {
 
     private static void insertMedia(String postID, String mediaPath){
         try {
-            PreparedStatement state1 = ConnectionDB.connect("insert into media" +
+            PreparedStatement state1 = connect("insert into media" +
                     " values(?, ?)");
             state1.setString(1, postID); //insert user id
             state1.setString(2, mediaPath);
@@ -60,7 +63,7 @@ public class PostsData {
         int size =0;
         try {
             Statement statement = null;
-            statement = ConnectionDB.connect();
+            statement = connect();
             ResultSet rs = statement.executeQuery("SELECT * FROM post");
             if (rs != null)
             {
@@ -94,7 +97,7 @@ public class PostsData {
         HashMap<String, Post> postResultList = new HashMap<>();
         try {
             PreparedStatement preStat = null;
-            preStat = ConnectionDB.connect(query);
+            preStat = connect(query);
             for(int i = 0; i < values.size(); i++){
                 preStat.setString(i+1, values.get(i));
             }
@@ -115,5 +118,50 @@ public class PostsData {
             e.printStackTrace();
         }
         return postResultList;
+    }
+
+    public static void saveData(String dbPath, String filePath) {
+        String sql = "insert into data values (?, ?)";
+        PreparedStatement stat = null;
+        try {
+            stat = connect(sql);
+            //create file and connect to stream
+            File file = new File(filePath);
+            FileInputStream fis = new FileInputStream(file);
+            stat.setString(1, dbPath);
+            stat.setBinaryStream(2, fis);
+            stat.executeUpdate();
+            stat.close();
+        } catch (SQLException | ClassNotFoundException | FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static void getData(String dbPath, String desPath) {
+        String sql = "select * from data where path='" + dbPath + "'";
+        Statement stat = null;
+        try {
+            stat = connect();
+            ResultSet rs = stat.executeQuery(sql);
+            //Create file
+            FileOutputStream fos = new FileOutputStream(desPath);
+            //read rs data
+            if(rs.next()) {
+                String path = rs.getString(1);
+                InputStream is = rs.getBinaryStream(2);
+                byte[] buffer = new byte[1024*1024];
+                while(is.read(buffer)>0) {
+                    fos.write(buffer);
+                }
+                fos.flush();
+                is.close();
+                fos.close();
+            }
+            stat.close();
+        } catch (SQLException | ClassNotFoundException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,33 +67,36 @@ public class UploadFileController extends HttpServlet {
             for (FileItem fileItem : fileItems) {
                 if ("text".equals(fileItem.getFieldName())) {
                     String text = fileItem.getString();
+                    text = new String (text.getBytes (StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                     post.content.setText(text);
                 }
                 if (!fileItem.isFormField() && fileItems.size() > 0) {
                     // xử lý file
                     String nameimg = fileItem.getName();
                     if (!nameimg.equals("")) {
-                        File dir = new File("");
-                        String dirUrl = dir.getAbsolutePath() + "/images/posts";
-//                        dirUrl = request.getServletContext().getRealPath("") + "/images/posts";
+                        String dirUrl = request.getServletContext().getRealPath("") + "/images/posts";
 
-                        dir = new File(dirUrl);
+                        File dir = new File(dirUrl);
                         if (!dir.exists()) {
                             dir.mkdirs();
                         }
-                        String fileImg = dirUrl + File.separator + nameimg;
-                        fileImg = dirUrl + "/" + nameimg; // Dien Test
-                        File file = new File(fileImg);
+                        String fileImgUrl = dirUrl + "/" + nameimg;
+                        File file = new File(fileImgUrl);
                         if (fileItem.getSize() <= upload.getFileSizeMax()) {
 
                             try {
                                 if ("images".equals(fileItem.getFieldName())) {
-                                    post.content.getImages().add("images/posts/" + file.getName());
+                                    String dbPath = "images/posts/" + file.getName();
+                                    post.content.getImages().add(dbPath);
                                     fileItem.write(file);
+                                    PostsData.saveData(dbPath, file.getAbsolutePath());
+
                                 }
                                 if ("videos".equals(fileItem.getFieldName())) {
-                                    post.content.getVideos().add("images/posts/" + file.getName());
+                                    String dbPath = "images/posts/" + file.getName();
+                                    post.content.getVideos().add(dbPath);
                                     fileItem.write(file);
+                                    PostsData.saveData(dbPath, file.getAbsolutePath());
                                 }
                             } catch (Exception e) {
                                 System.out

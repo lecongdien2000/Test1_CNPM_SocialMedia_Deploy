@@ -3,6 +3,7 @@
 <%@ page import="Model.Post" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Model.Content" %>
+<%@ page import="java.util.Collections" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -1792,6 +1793,7 @@
                                     <%
                                         Controller controller = new Controller();
                                         List<Post> list = controller.laydulieu(request);
+                                        Collections.sort(list);
                                         for (int i=list.size()-1;i >=0;i--){
                                             Post post = list.get(i);
 

@@ -4,7 +4,7 @@ import Database.*;
 /**
  *
  */
-public class Post implements IPost {
+public class Post implements IPost, Comparable<Post> {
     public Post() {
         id = Database.generateID();
         user = new User();
@@ -112,5 +112,10 @@ public class Post implements IPost {
                 ", content=" + content +
                 ", date=" + date +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Post o) {
+        return Integer.parseInt(this.id) - Integer.parseInt(o.id);
     }
 }
